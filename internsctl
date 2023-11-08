@@ -6,22 +6,48 @@ echo "Current date and time : $(date)"
 show_help(){
     echo "Usage:internsctl[date and time]"
     echo "custom linux command for interns"
-    echo " --help  this displays current date and time"
-    echo " --version  v0.1.0"
+    echo " --help        this displays current date and time"
+    echo " --version     v0.1.0"
     echo "cpu getinfo    Displays CPU information"
     echo "memory getinfo Displays memory information"
-    }
+    echo "user create   create new user"
 
+}
+list_users(){
+    echo "Regular Users:"
+    net user | grep -E "^[A-Za-z].*"
+}
 
 get_cpu_info(){
     echo "cpu information:"
     cat /proc/cpuinfo
-    }
+}
 
 get_memory_info(){
     echo "Memory Information:"
     cat /proc/meminfo
-    }
+}
+create_user(){
+    if [[ $EUID -ne 0 ]]; then
+        echo "This command requires administrative privileges . Run as root."
+        exit 1
+    fi
+
+    if [ -z "$2" ];then
+        echo "Error; Missing username . Usage :intersctl user create <username>"
+        exit 1
+    fi
+
+    username=$2
+
+    if id "$username" &>/dev/null; then
+        echo "Error: User '$username' already exists."
+        exit 1
+    fi
+    #create a new user
+    adduser "$username"
+    echo "User '$username' created successfully."
+}
 
 case "$1" in
     cpu)
@@ -48,6 +74,31 @@ case "$1" in
                 ;;
         esac
         ;;
+     user)
+         case "$2" in
+               create)
+                   create_user "$@"
+                   exit 0
+                   ;;
+               *)
+                   echo "Invalid 'user' command. See 'internactl --help for usage"
+                   exit 1
+                   ;;
+         esac
+         ;;
+     users)
+         case "$2" in
+             list)
+                 list_users
+                 exit 0
+                 ;;
+             *)
+                 echo "Invalid 'users' command. See 'internsctl --help'for usage."
+                 exit 1
+                 ;;
+         esac
+         ;; 
+
     --help)
         show_help
         exit 0
