@@ -1,0 +1,25 @@
+echo "internactl v0.1.0"
+echo "Current date and time : $(date)"
+
+
+
+show_help(){
+    echo "Usage:internsctl[date and time]"
+    echo "custom linux command for interns"
+    echo " --help  this displays current date and time"
+    echo " --version  v0.1.0"
+    }
+
+case "$1" in
+   --help)
+       show_help
+       exit 0
+       ;;
+   --version)
+       echo "internsctl v0.1.0"
+       exit 0
+       ;;
+   *)
+       echo "hello from internsctl"
+       ;;
+esac
