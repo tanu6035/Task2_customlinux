@@ -8,18 +8,55 @@ show_help(){
     echo "custom linux command for interns"
     echo " --help  this displays current date and time"
     echo " --version  v0.1.0"
+    echo "cpu getinfo    Displays CPU information"
+    echo "memory getinfo Displays memory information"
+    }
+
+
+get_cpu_info(){
+    echo "cpu information:"
+    cat /proc/cpuinfo
+    }
+
+get_memory_info(){
+    echo "Memory Information:"
+    cat /proc/meminfo
     }
 
 case "$1" in
-   --help)
-       show_help
-       exit 0
-       ;;
-   --version)
-       echo "internsctl v0.1.0"
-       exit 0
-       ;;
-   *)
-       echo "hello from internsctl"
-       ;;
+    cpu)
+        case "$2" in
+            getinfo)
+                get_cpu_info
+                exit 0
+                ;;
+            *)
+                echo "Invalid 'cpu' command. See 'internsctl --help' for usage."
+                exit 1
+                ;;
+        esac
+        ;;
+    memory)
+        case "$2" in
+            getinfo)
+                get_memory_info
+                exit 0
+                ;;
+            *)
+                echo "Invalid 'memory' command.See internsctl --help for usage."
+                exit 1
+                ;;
+        esac
+        ;;
+    --help)
+        show_help
+        exit 0
+        ;;
+    --version)
+        echo "internsctl v0.1.0"
+        exit 0
+        ;;
+    *)
+        echo "hello from internsctl"
+        ;;
 esac
