@@ -1,0 +1,2 @@
+echo "internactl v0.1.0"
+echo "Current date and time : $(date)"
